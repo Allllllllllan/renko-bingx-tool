@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <title>Teste Consulta TV → Backend Renko (Mock)</title>
+</head>
+<body style="font-family: monospace">
+  <h2>Consulta TV → Backend Renko (Mock)</h2>
+
+  <label>Símbolo TV:</label>
+  <input id="symbol" value="BTCUSDT.P">
+  <br><br>
+  <label>Capital base (USDT):</label>
+  <input id="capital" type="number" value="10000">
+  <br><br>
+  <label>Risco base (USDT):</label>
+  <input id="risk" type="number" value="1">
+  <br><br>
+  <button onclick="consultar()">Consultar</button>
+
+  <pre id="resultado" style="margin-top:20px; white-space: pre-wrap; background:#111; color:#0f0; padding:10px;"></pre>
+
+  <script>
+    async function consultar() {
+      const symbol = document.getElementById('symbol').value;
+      const capital = parseFloat(document.getElementById('capital').value);
+      const risk = parseFloat(document.getElementById('risk').value);
+
+      // Por enquanto é só um exemplo: não há backend real ainda
+      const payload = {
+        symbol_tv: symbol,
+        capital_base_usdt: capital,
+        risk_usdt: risk,
+        lookback_seconds: 900
+      };
+
+      // Em vez de chamar uma API, vamos mostrar o payload e um mock
+      const mockResposta = {
+        symbol_tv: symbol,
+        symbol_bingx: symbol.replace('.P', '-USDT').replace('USDT', '-USDT'),
+        preco_atual: 45000.0,
+        tick_size: 0.1,
+        spread_pct_atual: 0.0033,
+        dt_roundtrip_pct: 0.0617,
+        max_leverage: 125,
+        capital_base_usdt: capital,
+        saldo_real_usdt: capital - 124.68,
+        tijolos_1usdt: { delta_preco: 0.045, num_tijolos: 450, pct_equivalente: 0.1 },
+        slippage_max: { limiar_usdt: 2.0, delta_preco: 0.09, pct_equivalente: 0.2, num_tijolos: 900 }
+      };
+
+      document.getElementById('resultado').textContent =
+        'Payload enviado:\n' +
+        JSON.stringify(payload, null, 2) +
+        '\n\nResposta mockada:\n' +
+        JSON.stringify(mockResposta, null, 2);
+    }
+  </script>
+</body>
+</html>
